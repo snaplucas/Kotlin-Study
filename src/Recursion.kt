@@ -26,6 +26,18 @@ class Recursion {
         return balanced(chars, 0)
     }
 
+    fun <T> findNthElement(n: Int, xs: List<T>): T =
+            if (n == 0) xs.head
+            else findNthElement(n - 1, xs.tail)
+
+    fun <T> listLength(arr: List<Int>): Int {
+        fun loop(a: Int, arr: List<Int>): Int =
+                if (arr.isEmpty()) a
+                else loop(a + 1, arr.tail)
+
+        return loop(0, arr)
+    }
+
     val <T> List<T>.tail: List<T>
         get() = drop(1)
 
