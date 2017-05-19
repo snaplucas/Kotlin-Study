@@ -9,4 +9,7 @@ fun main(args: Array<String>) {
     val a = lista.map { x -> x + "x" }
 
     println(a)
+
+    val functions = Functions()
+    functions.blah(50)
 }

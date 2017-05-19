@@ -26,11 +26,15 @@ class Recursion {
         return balanced(chars, 0)
     }
 
-    fun <T> findNthElement(n: Int, xs: List<T>): T =
+    tailrec fun <T> findNthElement(n: Int, xs: List<T>): T =
             if (n == 0) xs.head
             else findNthElement(n - 1, xs.tail)
 
-    fun <T> listLength(arr: List<Int>): Int {
+    tailrec fun findFixPoint(x: Double = 1.0): Double =
+            if (x == Math.cos(x)) x
+            else findFixPoint(Math.cos(x))
+
+    fun listLength(arr: List<Int>): Int {
         fun loop(a: Int, arr: List<Int>): Int =
                 if (arr.isEmpty()) a
                 else loop(a + 1, arr.tail)
