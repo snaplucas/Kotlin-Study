@@ -5,7 +5,7 @@ class Recursion {
             else n * factorial(n - 1)
 
     fun factorialTail(n: Int) = {
-        fun loop(acc: Int, n: Int): Int =
+        tailrec fun loop(acc: Int, n: Int): Int =
                 if (n == 0) acc
                 else loop(acc * n, n - 1)
 
