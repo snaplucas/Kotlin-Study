@@ -4,12 +4,11 @@ class Recursion {
             if (n == 0) 1
             else n * factorial(n - 1)
 
-    fun factorialTail(n: Int) = {
+    fun factorialTail(n: Int): Int {
         tailrec fun loop(acc: Int, n: Int): Int =
                 if (n == 0) acc
                 else loop(acc * n, n - 1)
-
-        loop(1, n)
+        return loop(1, n)
     }
 
     fun pascal(c: Int, r: Int): Int =

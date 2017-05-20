@@ -3,7 +3,9 @@ fun main(args: Array<String>) {
 
     println(recursion.balance("(if (zero? x) max (/ 1 x))".toList()))
 
-    println(recursion.factorialTail(4).invoke())
+    println("factorial recursive: " + recursion.factorial(4))
+    println("factorial tail recursive: " + recursion.factorialTail(4))
+
     println(recursion.pascal(2, 2))
     val lista = "abcd".toList()
     val a = lista.map { x -> x + "x" }
@@ -11,6 +13,9 @@ fun main(args: Array<String>) {
     println(a)
 
     val functions = Functions()
+
+    functions.helloNtimes(10)
+
     functions.blah(50)
 
     fun isOdd(x: Int) = x % 2 != 0
@@ -23,14 +28,16 @@ fun main(args: Array<String>) {
     println(b())
 
 
-    fun some(a: Int) = a > 10
+    data class Person(val name: String, val age: Int?)
 
-    fun foo(x: Int, p: (Int) -> Boolean) = if (p(x)) println("maior") else println("menor")
+    val person: Person? = Person("Jack", 1)
+    person?.age?.let {
+        println("The person is aged $it")
+    }
 
-    fun blah(a: Int) = foo(a, { x -> x > 10 })
-
-    fun bleh(a: Int): (Int) -> Boolean = { x -> x == a }
-
-    fun poff(a: Int) = foo(a, ::some)
+    val person2: Person? = Person("Jack", null)
+    person2?.age?.let {
+        println("The person is aged $it")
+    }
 
 }

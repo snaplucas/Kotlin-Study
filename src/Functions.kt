@@ -10,4 +10,12 @@ class Functions {
 
     fun poff(a: Int) = foo(a, { some(it) })
 
+    fun helloNtimes(n: Int) = n.times {println("Hello")}
+
+    fun Int.times(f: ()->Unit) {
+        for (i in 1..this) {
+            f()
+        }
+    }
+
 }
