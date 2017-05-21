@@ -10,11 +10,20 @@ class Functions {
 
     fun poff(a: Int) = foo(a, { some(it) })
 
-    fun helloNtimes(n: Int) = n.times {println("Hello")}
+    fun helloNtimes(n: Int) = n.times { println("Hello") }
 
-    fun Int.times(f: ()->Unit) {
+    fun Int.times(f: () -> Unit) {
         for (i in 1..this) {
             f()
+        }
+    }
+
+    fun transform(color: String): Int {
+        return when (color) {
+            "Red" -> 0
+            "Green" -> 1
+            "Blue" -> 2
+            else -> throw IllegalArgumentException("Invalid color param value")
         }
     }
 
