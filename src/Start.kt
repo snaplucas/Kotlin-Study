@@ -39,5 +39,4 @@ fun main(args: Array<String>) {
     person2?.age?.let {
         println("The person is aged $it")
     }
-
 }
