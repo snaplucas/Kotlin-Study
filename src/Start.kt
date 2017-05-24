@@ -1,4 +1,17 @@
 fun main(args: Array<String>) {
+
+    val address = Classes.Address("Endereço", "São Paulo")
+    address.street = "rua"
+    println(address.city)
+    println(address.street)
+
+    address.country = "Brasil"
+    println(address.country)
+    println(address.isBrasil)
+
+    address.counter = 1
+    println(address.counter)
+
     val recursion = Recursion()
 
     println(recursion.balance("(if (zero? x) max (/ 1 x))".toList()))
