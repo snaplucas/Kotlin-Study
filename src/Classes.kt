@@ -1,30 +1,38 @@
-object Classes {
+class Address(var name: String, var city: String) {
+    fun printName() = println(name)
 
-    fun main(args: Array<String>) {
-        val a = Address("nome", "cidade")
-        println(a.name)
-        println(a.city)
-        a.street = "rua"
-        println(a.street)
-        a.printName()
-    }
+    var country: String? = ""
 
-    class Address(var name: String, var city: String) {
-        fun printName() = println(name)
+    val isBrasil get() = this.country == "Brasil"
 
-        var country: String? = ""
+    var counter = 0
+        set(value) {
+            if (value >= 0) field = value
+        }
 
-        val isBrasil get() = this.country == "Brasil"
+    var street: String = ""
+        get() = this.toString()
+        set(value) {
+            field = value
+        }
+}
 
-        var counter = 0
-            set(value) {
-                if (value >= 0) field = value
-            }
+data class Band(val guitar: String, val bass: String, val drums: String)
 
-        var street: String = ""
-            get() = this.toString()
-            set(value) {
-                field = value
-            }
-    }
+fun main(args: Array<String>) {
+    val a = Address("nome", "cidade")
+    println(a.name)
+    println(a.city)
+    a.street = "rua"
+    println(a.street)
+    a.printName()
+
+    //destructuring
+    val band = Band(guitar = "Alex", bass = "Geddy", drums = "Neil")
+    val (guitar, bass, drums) = band
+
+    println(band)
+    println(guitar)
+    println(bass)
+    println(drums)
 }

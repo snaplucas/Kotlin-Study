@@ -1,6 +1,6 @@
 fun main(args: Array<String>) {
 
-    val address = Classes.Address("Endereço", "São Paulo")
+    val address = Address("Endereço", "São Paulo")
     address.street = "rua"
     println(address.city)
     println(address.street)
