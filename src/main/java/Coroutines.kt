@@ -3,33 +3,16 @@
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 
-@Suppress("EXPERIMENTAL_FEATURE_WARNING")
 
-class Coroutines {
-
-    suspend fun doSomethingUsefulOne(): Int {
-        delay(1000L) // pretend we are doing something useful here
-        return 13
-    }
-
-    suspend fun doSomethingUsefulTwo(): Int {
-        delay(1000L) // pretend we are doing something useful here, too
-        return 29
-    }
-
-    fun <T> async(block: suspend () -> T) {}
-}
-
-fun main(args: Array<String>) {
-    println("Start")
-
-    // Start a coroutine
+fun main(args: Array<String>) = runBlocking<Unit> {
+    // start main coroutine
     launch(CommonPool) {
-        delay(1000)
-        println("Hello")
+        // create new coroutine in common thread pool
+        delay(1000L)
+        println("World!")
     }
-
-    Thread.sleep(2000) // wait for 2 seconds
-    println("Stop")
+    println("Hello,") // main coroutine continues while child is delayed
+    delay(2000L) // non-blocking delay for 2 seconds to keep JVM alive
 }
