@@ -1,3 +1,5 @@
+package fundamentals
+
 class Recursion {
 
     fun factorial(n: Int): Int =

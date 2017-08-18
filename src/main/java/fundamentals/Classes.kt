@@ -1,3 +1,5 @@
+package fundamentals
+
 class Address(var name: String, var city: String) {
     fun printName() = println(name)
 
@@ -20,7 +22,7 @@ class Address(var name: String, var city: String) {
 data class Band(val guitar: String, val bass: String, val drums: String)
 
 fun main(args: Array<String>) {
-    val a = Address("nome", "cidade")
+    val a = fundamentals.Address("nome", "cidade")
     println(a.name)
     println(a.city)
     a.street = "rua"
@@ -28,7 +30,7 @@ fun main(args: Array<String>) {
     a.printName()
 
     //destructuring
-    val band = Band(guitar = "Alex", bass = "Geddy", drums = "Neil")
+    val band = fundamentals.Band(guitar = "Alex", bass = "Geddy", drums = "Neil")
     val (guitar, bass, drums) = band
 
     println(band)

@@ -1,3 +1,5 @@
+package fundamentals
+
 class Functions {
 
     fun some(a: Int) = a > 10
