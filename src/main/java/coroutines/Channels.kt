@@ -2,13 +2,10 @@
 
 package coroutines
 
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.channels.produce
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
 import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.system.measureTimeMillis
 
@@ -34,25 +31,25 @@ fun mainB(args: Array<String>) = runBlocking {
     println("Done!")
 }
 
-//data class Ball(var hits: Int)
-//
-//fun main(args: Array<String>) = runBlocking<Unit> {
-//    val table = Channel<Ball>() // a shared table
-//    launch(coroutineContext) { player("ping", table) }
-//    launch(coroutineContext) { player("pong", table) }
-//    table.send(Ball(0)) // serve the ball
-//    delay(1000) // delay 1 second
-//    table.receive() // game over, grab the ball
-//}
-//
-//suspend fun player(name: String, table: Channel<Ball>) {
-//    for (ball in table) { // receive the ball in a loop
-//        ball.hits++
-//        println("$name $ball")
-//        delay(300) // wait a bit
-//        table.send(ball) // send the ball back
-//    }
-//}
+data class Ball(var hits: Int)
+
+fun mainC(args: Array<String>) = runBlocking<Unit> {
+    val table = Channel<Ball>() // a shared table
+    launch(coroutineContext) { player("ping", table) }
+    launch(coroutineContext) { player("pong", table) }
+    table.send(Ball(0)) // serve the ball
+    delay(1000) // delay 1 second
+    table.receive() // game over, grab the ball
+}
+
+suspend fun player(name: String, table: Channel<Ball>) {
+    for (ball in table) { // receive the ball in a loop
+        ball.hits++
+        println("$name $ball")
+        delay(300) // wait a bit
+        table.send(ball) // send the ball back
+    }
+}
 
 suspend fun massiveRun(context: CoroutineContext, action: suspend () -> Unit) {
     val n = 1000 // number of coroutines to launch
@@ -70,9 +67,26 @@ suspend fun massiveRun(context: CoroutineContext, action: suspend () -> Unit) {
 
 var counter = 0
 
-fun main(args: Array<String>) = runBlocking {
+fun mainD(args: Array<String>) = runBlocking {
     massiveRun(CommonPool) {
         counter++
     }
     println("Counter = $counter")
+}
+
+fun main(args: Array<String>) = runBlocking {
+    val jobs = arrayListOf<Job>()
+    jobs += launch(Unconfined) { // not confined -- will work with main thread
+        println("      'Unconfined': I'm working in thread ${Thread.currentThread().name}")
+    }
+    jobs += launch(coroutineContext) { // context of the parent, runBlocking coroutine
+        println("'coroutineContext': I'm working in thread ${Thread.currentThread().name}")
+    }
+    jobs += launch(CommonPool) { // will get dispatched to ForkJoinPool.commonPool (or equivalent)
+        println("      'CommonPool': I'm working in thread ${Thread.currentThread().name}")
+    }
+    jobs += launch(newSingleThreadContext("MyOwnThread")) { // will get its own new thread
+        println("          'newSTC': I'm working in thread ${Thread.currentThread().name}")
+    }
+    jobs.forEach { it.join() }
 }

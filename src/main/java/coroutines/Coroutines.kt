@@ -128,16 +128,6 @@ fun main10(args: Array<String>) = runBlocking {
     }
 }
 
-suspend fun doSomethingUsefulOne(): Int {
-    delay(1000L) // pretend we are doing something useful here
-    return 13
-}
-
-suspend fun doSomethingUsefulTwo(): Int {
-    delay(1000L) // pretend we are doing something useful here, too
-    return 29
-}
-
 fun main(args: Array<String>) = runBlocking {
     val time = measureTimeMillis {
         val one = asyncSomethingUsefulOne()
@@ -148,3 +138,13 @@ fun main(args: Array<String>) = runBlocking {
 }
 
 private fun asyncSomethingUsefulOne() = async(CommonPool) { doSomethingUsefulOne() }
+
+suspend fun doSomethingUsefulOne(): Int {
+    delay(1000L) // pretend we are doing something useful here
+    return 13
+}
+
+suspend fun doSomethingUsefulTwo(): Int {
+    delay(1000L) // pretend we are doing something useful here, too
+    return 29
+}
