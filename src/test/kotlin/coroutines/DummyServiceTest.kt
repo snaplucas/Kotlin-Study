@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.testng.annotations.Test
+import org.junit.Test
 import java.time.Duration
 import java.time.Instant
 
