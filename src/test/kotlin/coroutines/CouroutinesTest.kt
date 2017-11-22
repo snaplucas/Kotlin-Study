@@ -37,7 +37,7 @@ class CouroutinesTest {
             // create a lot of coroutines and list their jobs
             launch(CommonPool) {
                 delay(1000L)
-                print("")
+                print(".")
             }
         }
         jobs.forEach { it.join() } // wait for all jobs to complete
