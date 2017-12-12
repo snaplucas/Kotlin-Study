@@ -2,7 +2,7 @@ package coroutines
 
 import org.testng.annotations.Test
 
-class Callback{
+class Callback {
 
     @Test
     fun foo() {
@@ -23,7 +23,6 @@ private fun createPostAsync(token: Token, item: Item, cb: (Post) -> Unit) {
 
 private fun processPost(post: Post) {
     println("process")
-
 }
 
 private fun postItem(item: Item) {
