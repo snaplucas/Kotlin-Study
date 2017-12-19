@@ -19,11 +19,12 @@ class Recursion {
 
     fun balance(chars: List<Char>): Boolean {
         fun balanced(chars: List<Char>, open: Int): Boolean =
-                if (chars.isEmpty()) open == 0
-                else if (chars.head == '(') balanced(chars.tail, open + 1)
-                else if (chars.head == ')') open > 0 && balanced(chars.tail, open - 1)
-                else balanced(chars.tail, open)
-
+                when {
+                    chars.isEmpty() -> open == 0
+                    chars.head == '(' -> balanced(chars.tail, open + 1)
+                    chars.head == ')' -> open > 0 && balanced(chars.tail, open - 1)
+                    else -> balanced(chars.tail, open)
+                }
         return balanced(chars, 0)
     }
 
@@ -43,9 +44,9 @@ class Recursion {
         return loop(0, arr)
     }
 
-    val <T> List<T>.tail: List<T>
+    private val <T> List<T>.tail: List<T>
         get() = drop(1)
 
-    val <T> List<T>.head: T
+    private val <T> List<T>.head: T
         get() = first()
 }

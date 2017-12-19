@@ -14,12 +14,11 @@ class Address(var name: String, var city: String) {
 
     var street: String = ""
         get() = this.toString()
-        set(value) {
-            field = value
-        }
 }
 
 data class Band(val guitar: String, val bass: String, val drums: String)
+
+class Panel(val Id: Int, val name: String)
 
 fun main(args: Array<String>) {
     val a = fundamentals.Address("nome", "cidade")
@@ -37,4 +36,8 @@ fun main(args: Array<String>) {
     println(guitar)
     println(bass)
     println(drums)
+
+    val panel = Panel(1, "teste")
+    println(panel.Id)
+    println(panel.name)
 }
