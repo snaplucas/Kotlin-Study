@@ -12,7 +12,7 @@ import java.time.Instant
 class CoroutineTest {
 
     private val DummyService.asyncContent: Deferred<ContentDuration>
-        get() = async(CommonPool) { content }
+        get() = async(CommonPool) { content() }
 
     @Test
     fun shouldBeParallel() {
