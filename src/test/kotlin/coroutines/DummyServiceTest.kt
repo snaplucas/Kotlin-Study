@@ -1,5 +1,6 @@
 package coroutines
 
+import fundamentals.Singleton
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
@@ -16,6 +17,7 @@ class CoroutineTest {
 
     @Test
     fun shouldBeParallel() {
+        Singleton.printFoo()
         val services = listOf("Service A", "Service B", "Service C", "Service X", "Service Y", "Service Z")
         val start = Instant.now()
         val results = runBlocking {

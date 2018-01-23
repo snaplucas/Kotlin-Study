@@ -1,7 +1,6 @@
 package fundamentals
 
 fun main(args: Array<String>) {
-
     val address = Address("Endereço", "São Paulo")
     address.street = "rua"
     println(address.city)
@@ -54,4 +53,5 @@ fun main(args: Array<String>) {
     person2?.age?.let {
         println("The person is aged $it")
     }
+
 }
