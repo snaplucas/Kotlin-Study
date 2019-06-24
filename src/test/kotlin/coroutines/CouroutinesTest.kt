@@ -1,7 +1,8 @@
 package coroutines
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.junit.Test
+import java.util.concurrent.TimeoutException
 import kotlin.system.measureTimeMillis
 
 class CouroutinesTest {
@@ -9,7 +10,7 @@ class CouroutinesTest {
     @Test
     fun main1() = runBlocking {
         // start fundamentals.coroutines.main coroutine
-        launch(CommonPool) {
+        GlobalScope.launch {
             // create new coroutine in common thread pool
             delay(1000L)
             println("World!")
@@ -21,7 +22,7 @@ class CouroutinesTest {
     @Test
 
     fun main3() = runBlocking {
-        val job = launch(CommonPool) { doWorld() }
+        val job = GlobalScope.launch { doWorld() }
         println("Hello,")
         job.join()
     }
@@ -35,7 +36,7 @@ class CouroutinesTest {
     fun main4() = runBlocking {
         val jobs = List(100_000) {
             // create a lot of coroutines and list their jobs
-            launch(CommonPool) {
+            GlobalScope.launch {
                 delay(1000L)
                 print(".")
             }
@@ -45,7 +46,7 @@ class CouroutinesTest {
 
     @Test
     fun main5() = runBlocking {
-        launch(CommonPool) {
+        GlobalScope.launch {
             repeat(1000) { i ->
                 println("I'm sleeping $i ...")
                 delay(500L)
@@ -56,7 +57,7 @@ class CouroutinesTest {
 
     @Test
     fun main6() = runBlocking {
-        val job = launch(CommonPool) {
+        val job = GlobalScope.launch {
             repeat(1000) { i ->
                 println("I'm sleeping $i ...")
                 delay(500L)
@@ -71,7 +72,7 @@ class CouroutinesTest {
 
     @Test
     fun main7() = runBlocking {
-        val job = launch(CommonPool) {
+        val job = GlobalScope.launch {
             var nextPrintTime = System.currentTimeMillis()
             var i = 0
             while (i < 10) { // computation loop
@@ -91,7 +92,7 @@ class CouroutinesTest {
 
     @Test
     fun main8() = runBlocking {
-        val job = launch(CommonPool) {
+        val job = GlobalScope.launch {
             var nextPrintTime = 0L
             var i = 0
             while (isActive) { // cancellable computation loop
@@ -111,7 +112,7 @@ class CouroutinesTest {
 
     @Test
     fun main9() = runBlocking {
-        val job = launch(CommonPool) {
+        val job = GlobalScope.launch {
             try {
                 repeat(1000) { i ->
                     println("I'm sleeping $i ...")
@@ -141,14 +142,14 @@ class CouroutinesTest {
     @Test
     fun main11() = runBlocking {
         val time = measureTimeMillis {
-            val one = asyncSomethingUsefulOne()
-            val two = async(CommonPool) { doSomethingUsefulTwo() }
+            val one = somethingUsefulOneAsync()
+            val two = GlobalScope.async { doSomethingUsefulTwo() }
             println("The answer is ${one.await() + two.await()}")
         }
         println("Completed in $time ms")
     }
 
-    private fun asyncSomethingUsefulOne() = async(CommonPool) { doSomethingUsefulOne() }
+    private fun somethingUsefulOneAsync() = GlobalScope.async { doSomethingUsefulOne() }
 
     private suspend fun doSomethingUsefulOne(): Int {
         delay(1000L) // pretend we are doing something useful here

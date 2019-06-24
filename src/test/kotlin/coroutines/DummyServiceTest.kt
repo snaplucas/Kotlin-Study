@@ -1,10 +1,10 @@
 package coroutines
 
-import fundamentals.Singleton
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
+
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.time.Duration
@@ -13,11 +13,14 @@ import java.time.Instant
 class CoroutineTest {
 
     private val DummyService.asyncContent: Deferred<ContentDuration>
-        get() = async(CommonPool) { content() }
+        get() = GlobalScope.async { content() }
+
+    private fun asyncContent(dummy: DummyService): Deferred<ContentDuration> {
+        return GlobalScope.async { dummy.content() }
+    }
 
     @Test
     fun shouldBeParallel() {
-        Singleton.printFoo()
         val services = listOf("Service A", "Service B", "Service C", "Service X", "Service Y", "Service Z")
         val start = Instant.now()
         val results = runBlocking {
@@ -30,7 +33,7 @@ class CoroutineTest {
         assertThat(results).isNotNull()
                 .isNotEmpty()
                 .hasSameSizeAs(services)
-        val maxTimeElapsed = results.maxBy { it -> it.duration }?.duration?.toLong()
+        val maxTimeElapsed = results.maxBy { it.duration }?.duration?.toLong()
         println("Time taken by the longest service is  $maxTimeElapsed milliseconds")
         val duration = Duration.between(start, end)
         val timeElapsed = duration.toMillis()

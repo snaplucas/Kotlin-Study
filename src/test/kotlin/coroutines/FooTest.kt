@@ -16,7 +16,7 @@ class FooTest {
     }
 
     @Test
-    fun anotherFoo(){
+    fun anotherFoo() {
         val fruits = listOf("apple", "banana", "orange")
         println(fruits.map { it.toUpperCase() })
     }
