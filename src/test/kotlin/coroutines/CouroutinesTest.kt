@@ -3,25 +3,24 @@ package coroutines
 import kotlinx.coroutines.*
 import org.junit.Test
 import java.util.concurrent.TimeoutException
-import kotlin.system.measureTimeMillis
 
+@DelicateCoroutinesApi
 class CouroutinesTest {
 
     @Test
-    fun main1() = runBlocking {
-        // start fundamentals.coroutines.main coroutine
+    fun testing1() = runBlocking {
+        // start fundamentals.coroutines.testing coroutine
         GlobalScope.launch {
             // create new coroutine in common thread pool
             delay(1000L)
             println("World!")
         }
-        println("Hello,") // fundamentals.coroutines.main coroutine continues while child is delayed
+        println("Hello,") // fundamentals.coroutines.testing coroutine continues while child is delayed
         delay(2000L) // non-blocking delay for 2 seconds to keep JVM alive
     }
 
     @Test
-
-    fun main3() = runBlocking {
+    fun testing3() = runBlocking {
         val job = GlobalScope.launch { doWorld() }
         println("Hello,")
         job.join()
@@ -33,7 +32,7 @@ class CouroutinesTest {
     }
 
     @Test
-    fun main4() = runBlocking {
+    fun testing4() = runBlocking {
         val jobs = List(100_000) {
             // create a lot of coroutines and list their jobs
             GlobalScope.launch {
@@ -45,7 +44,7 @@ class CouroutinesTest {
     }
 
     @Test
-    fun main5() = runBlocking {
+    fun testing5() = runBlocking {
         GlobalScope.launch {
             repeat(1000) { i ->
                 println("I'm sleeping $i ...")
@@ -56,7 +55,7 @@ class CouroutinesTest {
     }
 
     @Test
-    fun main6() = runBlocking {
+    fun testing6() = runBlocking {
         val job = GlobalScope.launch {
             repeat(1000) { i ->
                 println("I'm sleeping $i ...")
@@ -64,14 +63,14 @@ class CouroutinesTest {
             }
         }
         delay(1300L) // delay a bit
-        println("main: I'm tired of waiting!")
+        println("testing: I'm tired of waiting!")
         job.cancel() // cancels the job
         delay(1300L) // delay a bit to ensure it was cancelled indeed
-        println("main: Now I can quit.")
+        println("testing: Now I can quit.")
     }
 
     @Test
-    fun main7() = runBlocking {
+    fun testing7() = runBlocking {
         val job = GlobalScope.launch {
             var nextPrintTime = System.currentTimeMillis()
             var i = 0
@@ -84,14 +83,14 @@ class CouroutinesTest {
             }
         }
         delay(1300L) // delay a bit
-        println("main: I'm tired of waiting!")
+        println("testing: I'm tired of waiting!")
         job.cancel() // cancels the job
         delay(1300L) // delay a bit to see if it was cancelled....
-        println("main: Now I can quit.")
+        println("testing: Now I can quit.")
     }
 
     @Test
-    fun main8() = runBlocking {
+    fun testing8() = runBlocking {
         val job = GlobalScope.launch {
             var nextPrintTime = 0L
             var i = 0
@@ -104,15 +103,15 @@ class CouroutinesTest {
             }
         }
         delay(1300L) // delay a bit
-        println("main: I'm tired of waiting!")
+        println("testing: I'm tired of waiting!")
         job.cancel() // cancels the job
         delay(1300L) // delay a bit to see if it was cancelled....
-        println("main: Now I can quit.")
+        println("testing: Now I can quit.")
     }
 
     @Test
-    fun main9() = runBlocking {
-        val job = GlobalScope.launch {
+    fun testing9() = runBlocking {
+        val job = launch {
             try {
                 repeat(1000) { i ->
                     println("I'm sleeping $i ...")
@@ -123,14 +122,14 @@ class CouroutinesTest {
             }
         }
         delay(1300L) // delay a bit
-        println("main: I'm tired of waiting!")
+        println("testing: I'm tired of waiting!")
         job.cancel() // cancels the job
         delay(1300L) // delay a bit to ensure it was cancelled indeed
-        println("main: Now I can quit.")
+        println("testing: Now I can quit.")
     }
 
     @Test(expected = TimeoutException::class)
-    fun man10() = runBlocking {
+    fun testing10() = runBlocking {
         withTimeout(1300L) {
             repeat(1000) { i ->
                 println("I'm sleeping $i ...")
@@ -139,17 +138,27 @@ class CouroutinesTest {
         }
     }
 
+
     @Test
-    fun main11() = runBlocking {
-        val time = measureTimeMillis {
-            val one = somethingUsefulOneAsync()
-            val two = GlobalScope.async { doSomethingUsefulTwo() }
-            println("The answer is ${one.await() + two.await()}")
-        }
-        println("Completed in $time ms")
+    fun testing() {
+        val list = listOf(someFunctionAsync(), someFunctionAsync(), someFunctionAsync())
+        runBlocking { list.map { it.await() } }
     }
 
-    private fun somethingUsefulOneAsync() = GlobalScope.async { doSomethingUsefulOne() }
+    private fun someFunctionAsync() = GlobalScope.async {
+        println("hey")
+        delay(2000L)
+        println("hola")
+    }
+
+    @Test
+    fun testing11() = runBlocking {
+        val one = somethingUsefulOneAsync()
+        val two = async { doSomethingUsefulTwo() }
+        println("The answer is ${one.await() + two.await()}")
+    }
+
+    private fun somethingUsefulOneAsync(): Deferred<Int> = GlobalScope.async { doSomethingUsefulOne() }
 
     private suspend fun doSomethingUsefulOne(): Int {
         delay(1000L) // pretend we are doing something useful here
@@ -159,5 +168,16 @@ class CouroutinesTest {
     private suspend fun doSomethingUsefulTwo(): Int {
         delay(1000L) // pretend we are doing something useful here, too
         return 29
+    }
+
+    @Test
+    fun some() {
+        suspend fun main() = coroutineScope {
+            launch {
+                delay(1000)
+                println("Kotlin Coroutines World!")
+            }
+            println("Hello")
+        }
     }
 }

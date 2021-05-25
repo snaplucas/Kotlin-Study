@@ -1,21 +1,18 @@
 package coroutines
 
-
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.time.Duration
 import java.time.Instant
 
+@DelicateCoroutinesApi
 class CoroutineTest {
 
     private val DummyService.asyncContent: Deferred<ContentDuration>
         get() = GlobalScope.async { content() }
 
-    private fun asyncContent(dummy: DummyService): Deferred<ContentDuration> {
+    private fun contentAsync(dummy: DummyService): Deferred<ContentDuration> {
         return GlobalScope.async { dummy.content() }
     }
 
@@ -25,15 +22,15 @@ class CoroutineTest {
         val start = Instant.now()
         val results = runBlocking {
             services.map { DummyService(it) }
-                    .map { it.asyncContent }
+                    .map { contentAsync(it) }
                     .map { it.await() }
         }
         val end = Instant.now()
         results.forEach { println(it) }
-        assertThat(results).isNotNull()
-                .isNotEmpty()
+        assertThat(results).isNotNull
+                .isNotEmpty
                 .hasSameSizeAs(services)
-        val maxTimeElapsed = results.maxBy { it.duration }?.duration?.toLong()
+        val maxTimeElapsed = results.maxByOrNull { it.duration }?.duration?.toLong()
         println("Time taken by the longest service is  $maxTimeElapsed milliseconds")
         val duration = Duration.between(start, end)
         val timeElapsed = duration.toMillis()

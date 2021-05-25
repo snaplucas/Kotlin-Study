@@ -1,6 +1,6 @@
 package fundamentals
 
-fun main(args: Array<String>) {
+fun main() {
     val address = Address("Endereço", "São Paulo")
     address.street = "rua"
     println(address.city)
