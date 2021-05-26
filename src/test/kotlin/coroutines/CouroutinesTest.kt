@@ -138,22 +138,9 @@ class CouroutinesTest {
         }
     }
 
-
-    @Test
-    fun testing() {
-        val list = listOf(someFunctionAsync(), someFunctionAsync(), someFunctionAsync())
-        runBlocking { list.map { it.await() } }
-    }
-
-    private fun someFunctionAsync() = GlobalScope.async {
-        println("hey")
-        delay(2000L)
-        println("hola")
-    }
-
     @Test
     fun testing11() = runBlocking {
-        val one = somethingUsefulOneAsync()
+        val one = async { doSomethingUsefulOne() }
         val two = async { doSomethingUsefulTwo() }
         println("The answer is ${one.await() + two.await()}")
     }
@@ -161,23 +148,45 @@ class CouroutinesTest {
     private fun somethingUsefulOneAsync(): Deferred<Int> = GlobalScope.async { doSomethingUsefulOne() }
 
     private suspend fun doSomethingUsefulOne(): Int {
-        delay(1000L) // pretend we are doing something useful here
+        delay(1000L)
+        println("hey")
         return 13
     }
 
     private suspend fun doSomethingUsefulTwo(): Int {
-        delay(1000L) // pretend we are doing something useful here, too
+        delay(1000L)
+        println("hey")
         return 29
     }
 
     @Test
-    fun some() {
-        suspend fun main() = coroutineScope {
-            launch {
-                delay(1000)
-                println("Kotlin Coroutines World!")
-            }
-            println("Hello")
+    fun testing12() {
+        runBlocking {
+            listOf(someFunctionAsync(), someFunctionAsync(), someFunctionAsync()).awaitAll()
         }
+    }
+
+    private fun someFunctionAsync() = GlobalScope.async {
+        println("hey")
+        delay(5000L)
+        println("hola")
+    }
+
+    @Test
+    fun testing13() {
+        runBlocking {
+            val one = async { someSuspendFunction() }
+            val two = async { someSuspendFunction() }
+            val three = async { someSuspendFunction() }
+
+            val list = listOf(one, two, three)
+            list.awaitAll()
+        }
+    }
+
+    private suspend fun someSuspendFunction() {
+        println("hey")
+        delay(2000L)
+        println("hola")
     }
 }
