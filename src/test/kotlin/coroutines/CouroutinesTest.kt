@@ -3,6 +3,7 @@ package coroutines
 import kotlinx.coroutines.*
 import org.junit.Test
 import java.util.concurrent.TimeoutException
+import kotlin.system.measureTimeMillis
 
 @DelicateCoroutinesApi
 class CouroutinesTest {
@@ -138,13 +139,6 @@ class CouroutinesTest {
         }
     }
 
-    @Test
-    fun testing11() = runBlocking {
-        val one = async { doSomethingUsefulOne() }
-        val two = async { doSomethingUsefulTwo() }
-        println("The answer is ${one.await() + two.await()}")
-    }
-
     private fun somethingUsefulOneAsync(): Deferred<Int> = GlobalScope.async { doSomethingUsefulOne() }
 
     private suspend fun doSomethingUsefulOne(): Int {
@@ -188,5 +182,44 @@ class CouroutinesTest {
         println("hey")
         delay(2000L)
         println("hola")
+    }
+
+    @Test
+    fun testing14() {
+        runBlocking {
+            val time = measureTimeMillis {
+                val one = async(start = CoroutineStart.LAZY) { doSomethingUsefulOne() }
+                val two = async(start = CoroutineStart.LAZY) { doSomethingUsefulTwo() }
+                // some computation
+                one.start() // start the first one
+                two.start() // start the second one
+                println("The answer is ${one.await() + two.await()}")
+            }
+            println("Completed in $time ms")
+        }
+    }
+
+    @Test
+    fun testing11() = runBlocking {
+        val time = measureTimeMillis {
+            val one = async { doSomethingUsefulOne() }
+            val two = async { doSomethingUsefulTwo() }
+            println("The answer is ${one.await() + two.await()}")
+        }
+        println("Completed in $time ms")
+    }
+
+    @Test
+    fun testing15() = runBlocking {
+        val time = measureTimeMillis {
+            println("The answer is ${concurrentSum()}")
+        }
+        println("Completed in $time ms")
+    }
+
+    private suspend fun concurrentSum(): Int = coroutineScope {
+        val one = async { doSomethingUsefulOne() }
+        val two = async { doSomethingUsefulTwo() }
+        one.await() + two.await()
     }
 }
